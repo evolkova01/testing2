@@ -3,6 +3,12 @@ language:
 
 before_install:
   - pip install --user cpp-coveralls
+  
+addons:
+  sonarcloud:
+    organization: "evolkova01"
+    token:
+      secure: "foY4r7F/qbd5l0LBNi2pQRupYCRTOLERhYAAbdPrQmnvOPjUh+LhppBKtSWwHnPNyL2Q9GkUPoiNwXsLjCng85ZchodGRzyjKy/eMTfkGZM2X2vqWFvZzNeS7du0s3z2pLNlAy2o71+8uTk2ugGqZ0PKF4PgDuHQTk2G7/PFtrj0WRvLWxLVA5FRQb16kwHew6AK31LCX8BrOFl/r1hpsuMoCu0bXAFe+2IAar3UBUy7rJthChyYofDW1yeRITykOwAQpI+leTu2xndUcpmXqZrp48uwj9slJ/wN1jZv8lFTTIG88ZkSxkws8MIdjtO7upotEnLB8cy8SpRxJ8e/cFEEF0R+oOf+1TMtwP1aII2LgFzAmi4+9w9f6dOBhyDPJ7GbqdhHxM5Zg0CBTu2gVS33L1Kfgx1vJbozz+qZd+v3mVHf/6is7p5GcNk7iCzfRl4GbzAU5fqVpXwLFWXAt2g3pif30UDf1x2S0R2B5YTn3Od6ve8UnQWGxp9N2UcV9+PLcNgwBrEDLuuGf4/fImV/xQyQIfY1aeH7Ad/6iPyyNv2eWAYQC84AlKdBcCBpyrWqFU5epL0Eo3X6ENzd01bU0topPfSbluq5BVARJdc8jPIP+N6XQ4Oo6WE5kajH6r1+9LbBf4VI5XZbMfNaL0bR/Mhass7E2Tv0I2KyZ+I="
 
 script:
   - qmake
@@ -11,6 +17,8 @@ script:
 
 after_success:
   - coveralls --root . -E ".*external.*" -E ".*tests.*"
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
 
 notifications:
   email: false
